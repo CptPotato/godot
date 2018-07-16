@@ -711,6 +711,7 @@ public:
 		GLOW_THRESHOLD_MODE_CUT,
 		GLOW_THRESHOLD_MODE_CUT_SMOOTH,
 		GLOW_THRESHOLD_MODE_BOOST,
+		GLOW_THRESHOLD_MODE_BOOST_SMOOTH,
 	};
 	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_level_weight, EnvironmentGlowThresholdMode p_threshold_mode, float p_threshold, float p_threshold_gain, float p_threshold_fade, EnvironmentGlowBlendMode p_blend_mode, float p_blend_intensity, bool p_bicubic_upscale) = 0;
 

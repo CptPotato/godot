@@ -99,7 +99,7 @@ uniform highp float auto_exposure_grey;
 
 #endif
 
-#if defined(GLOW_USE_THRESHOLD_CUT) || defined(GLOW_USE_THRESHOLD_CUT_SMOOTH) || defined(GLOW_USE_THRESHOLD_BOOST)
+#if defined(GLOW_USE_THRESHOLD_CUT) || defined(GLOW_USE_THRESHOLD_CUT_SMOOTH) || defined(GLOW_USE_THRESHOLD_BOOST) || defined(GLOW_USE_THRESHOLD_BOOST_SMOOTH)
 	uniform float glow_threshold;
 	uniform float glow_threshold_gain;
 	uniform float glow_threshold_fade;
@@ -109,14 +109,6 @@ uniform highp float auto_exposure_grey;
 
 uniform float camera_z_far;
 uniform float camera_z_near;
-
-
-vec3 apply_overbrighten(vec3 color, float threshold, float factor, float inv_fade_length) // inv_fade_length = 1.0 / fade_length
-{
-	vec3 color_thresh = (color - threshold);
-	vec3 f = clamp(color_thresh * inv_fade_length, vec3(0.0), vec3(1.0));
-	return mix(color, color_thresh * factor, f);
-}
 
 void main() {
 
@@ -141,7 +133,7 @@ void main() {
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0, 2.0)*pixel_size,lod )*0.06136;
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0,-1.0)*pixel_size,lod )*0.24477;
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0,-2.0)*pixel_size,lod )*0.06136;
-	frag_color = color;
+	frag_color = color * glow_level_weight;
 #endif
 
 //glow uses larger sigma for a more rounded blur effect
@@ -165,7 +157,7 @@ void main() {
 	color+=textureLod( source_color,  uv_interp+vec2(0.0, 2.0)*pixel_size,lod )*0.122581;
 	color+=textureLod( source_color,  uv_interp+vec2(0.0,-1.0)*pixel_size,lod )*0.233062;
 	color+=textureLod( source_color,  uv_interp+vec2(0.0,-2.0)*pixel_size,lod )*0.122581;
-	frag_color = color;
+	frag_color = color * glow_level_weight;
 #endif
 
 #ifdef DOF_FAR_BLUR
@@ -290,6 +282,10 @@ void main() {
 	#endif
 	
 	#ifdef GLOW_USE_THRESHOLD_BOOST
+		frag_color.rgb += frag_color.rgb * (glow_threshold_gain - 1.0f) * step(vec3(glow_threshold), frag_color.rgb);
+	#endif
+	
+	#ifdef GLOW_USE_THRESHOLD_BOOST_SMOOTH
 		frag_color.rgb += frag_color.rgb * (glow_threshold_gain - 1.0f) * step(vec3(glow_threshold), frag_color.rgb);
 	#endif
 	

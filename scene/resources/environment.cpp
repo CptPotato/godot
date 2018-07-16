@@ -1157,7 +1157,7 @@ void Environment::_bind_methods() {
 	ADD_PROPERTYI(PropertyInfo(Variant::BOOL, "glow_levels/7"), "set_glow_level", "is_glow_level_enabled", 6);
 
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_level_weight", PROPERTY_HINT_RANGE, "0.0,2.0,0.01"), "set_glow_level_weight", "get_glow_level_weight");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "glow_threshold_mode", PROPERTY_HINT_ENUM, "Cut,Cut Smooth,Boost"), "set_glow_threshold_mode", "get_glow_threshold_mode");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "glow_threshold_mode", PROPERTY_HINT_ENUM, "Cut,Cut Smooth,Boost,Boost Smooth"), "set_glow_threshold_mode", "get_glow_threshold_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold", PROPERTY_HINT_RANGE, "0.0,16.0,0.01"), "set_glow_threshold", "get_glow_threshold");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold_gain", PROPERTY_HINT_RANGE, "1.0,32.0,0.01"), "set_glow_threshold_gain", "get_glow_threshold_gain");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold_fade", PROPERTY_HINT_RANGE, "0.0,32.0,0.01"), "set_glow_threshold_fade", "get_glow_threshold_fade");

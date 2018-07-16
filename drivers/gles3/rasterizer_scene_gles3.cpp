@@ -3893,6 +3893,7 @@ void RasterizerSceneGLES3::_post_process(Environment *env, const CameraMatrix &p
 				state.effect_blur_shader.set_conditional(EffectBlurShaderGLES3::GLOW_USE_THRESHOLD_CUT, env->glow_threshold_mode == VS::GLOW_THRESHOLD_MODE_CUT);
 				state.effect_blur_shader.set_conditional(EffectBlurShaderGLES3::GLOW_USE_THRESHOLD_CUT_SMOOTH, env->glow_threshold_mode == VS::GLOW_THRESHOLD_MODE_CUT_SMOOTH);
 				state.effect_blur_shader.set_conditional(EffectBlurShaderGLES3::GLOW_USE_THRESHOLD_BOOST, env->glow_threshold_mode == VS::GLOW_THRESHOLD_MODE_BOOST);
+				state.effect_blur_shader.set_conditional(EffectBlurShaderGLES3::GLOW_USE_THRESHOLD_BOOST_SMOOTH, env->glow_threshold_mode == VS::GLOW_THRESHOLD_MODE_BOOST_SMOOTH);
 			}
 
 			state.effect_blur_shader.set_conditional(EffectBlurShaderGLES3::GLOW_GAUSSIAN_HORIZONTAL, true);
