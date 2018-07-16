@@ -133,19 +133,19 @@ float Environment::get_ambient_light_sky_contribution() const {
 
 void Environment::set_tonemapper(ToneMapper p_tone_mapper) {
 
-	tone_mapper = p_tone_mapper;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	tonemapper = p_tone_mapper;
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 
 Environment::ToneMapper Environment::get_tonemapper() const {
 
-	return tone_mapper;
+	return tonemapper;
 }
 
 void Environment::set_tonemap_exposure(float p_exposure) {
 
 	tonemap_exposure = p_exposure;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 
 float Environment::get_tonemap_exposure() const {
@@ -156,17 +156,27 @@ float Environment::get_tonemap_exposure() const {
 void Environment::set_tonemap_white(float p_white) {
 
 	tonemap_white = p_white;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 float Environment::get_tonemap_white() const {
 
 	return tonemap_white;
 }
 
+void Environment::set_tonemap_filmic_saturation(bool p_filmic_saturation) {
+
+	tonemap_filmic_saturation = p_filmic_saturation;
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+}
+bool Environment::get_tonemap_filmic_saturation() const {
+
+	return tonemap_filmic_saturation;
+}
+
 void Environment::set_tonemap_auto_exposure(bool p_enabled) {
 
 	tonemap_auto_exposure = p_enabled;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 	_change_notify();
 }
 bool Environment::get_tonemap_auto_exposure() const {
@@ -177,7 +187,7 @@ bool Environment::get_tonemap_auto_exposure() const {
 void Environment::set_tonemap_auto_exposure_max(float p_auto_exposure_max) {
 
 	tonemap_auto_exposure_max = p_auto_exposure_max;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 float Environment::get_tonemap_auto_exposure_max() const {
 
@@ -187,7 +197,7 @@ float Environment::get_tonemap_auto_exposure_max() const {
 void Environment::set_tonemap_auto_exposure_min(float p_auto_exposure_min) {
 
 	tonemap_auto_exposure_min = p_auto_exposure_min;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 float Environment::get_tonemap_auto_exposure_min() const {
 
@@ -197,7 +207,7 @@ float Environment::get_tonemap_auto_exposure_min() const {
 void Environment::set_tonemap_auto_exposure_speed(float p_auto_exposure_speed) {
 
 	tonemap_auto_exposure_speed = p_auto_exposure_speed;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 float Environment::get_tonemap_auto_exposure_speed() const {
 
@@ -207,7 +217,7 @@ float Environment::get_tonemap_auto_exposure_speed() const {
 void Environment::set_tonemap_auto_exposure_grey(float p_auto_exposure_grey) {
 
 	tonemap_auto_exposure_grey = p_auto_exposure_grey;
-	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tone_mapper), tonemap_exposure, tonemap_white, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
+	VS::get_singleton()->environment_set_tonemap(environment, VS::EnvironmentToneMapper(tonemapper), tonemap_exposure, tonemap_white, tonemap_filmic_saturation, tonemap_auto_exposure, tonemap_auto_exposure_min, tonemap_auto_exposure_max, tonemap_auto_exposure_speed, tonemap_auto_exposure_grey);
 }
 float Environment::get_tonemap_auto_exposure_grey() const {
 
@@ -504,7 +514,7 @@ float Environment::get_ssao_edge_sharpness() const {
 void Environment::set_glow_enabled(bool p_enabled) {
 
 	glow_enabled = p_enabled;
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 	_change_notify();
 }
 
@@ -522,7 +532,7 @@ void Environment::set_glow_level(int p_level, bool p_enabled) {
 	else
 		glow_levels &= ~(1 << p_level);
 
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
 bool Environment::is_glow_level_enabled(int p_level) const {
 
@@ -531,75 +541,86 @@ bool Environment::is_glow_level_enabled(int p_level) const {
 	return glow_levels & (1 << p_level);
 }
 
-void Environment::set_glow_intensity(float p_intensity) {
+void Environment::set_glow_level_weight(float p_level_weight) {
 
-	glow_intensity = p_intensity;
-
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	glow_level_weight = p_level_weight;
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
-float Environment::get_glow_intensity() const {
+float Environment::get_glow_level_weight() const {
 
-	return glow_intensity;
-}
-
-void Environment::set_glow_strength(float p_strength) {
-
-	glow_strength = p_strength;
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
-}
-float Environment::get_glow_strength() const {
-
-	return glow_strength;
+	return glow_level_weight;
 }
 
-void Environment::set_glow_bloom(float p_threshold) {
+void Environment::set_glow_threshold_mode(GlowThresholdMode p_threshold_mode) {
 
-	glow_bloom = p_threshold;
+	glow_threshold_mode = p_threshold_mode;
 
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
-float Environment::get_glow_bloom() const {
+ Environment::GlowThresholdMode Environment::get_glow_threshold_mode() const {
 
-	return glow_bloom;
+	return glow_threshold_mode;
+}
+
+void Environment::set_glow_threshold(float p_threshold) {
+
+	glow_threshold = p_threshold;
+
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
+}
+float Environment::get_glow_threshold() const {
+
+	return glow_threshold;
+}
+
+void Environment::set_glow_threshold_gain(float p_threshold_gain) {
+
+	glow_threshold_gain = p_threshold_gain;
+
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
+}
+float Environment::get_glow_threshold_gain() const {
+
+	return glow_threshold_gain;
+}
+
+void Environment::set_glow_threshold_fade(float p_threshold_fade) {
+
+	glow_threshold_fade = p_threshold_fade;
+
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
+}
+float Environment::get_glow_threshold_fade() const {
+
+	return glow_threshold_fade;
 }
 
 void Environment::set_glow_blend_mode(GlowBlendMode p_mode) {
 
 	glow_blend_mode = p_mode;
 
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
 Environment::GlowBlendMode Environment::get_glow_blend_mode() const {
 
 	return glow_blend_mode;
 }
 
-void Environment::set_glow_hdr_bleed_threshold(float p_threshold) {
+void Environment::set_glow_blend_intensity(float p_blend_intensity) {
 
-	glow_hdr_bleed_threshold = p_threshold;
+	glow_blend_intensity = p_blend_intensity;
 
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
-float Environment::get_glow_hdr_bleed_threshold() const {
+float Environment::get_glow_blend_intensity() const {
 
-	return glow_hdr_bleed_threshold;
-}
-
-void Environment::set_glow_hdr_bleed_scale(float p_scale) {
-
-	glow_hdr_bleed_scale = p_scale;
-
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
-}
-float Environment::get_glow_hdr_bleed_scale() const {
-
-	return glow_hdr_bleed_scale;
+	return glow_blend_intensity;
 }
 
 void Environment::set_glow_bicubic_upscale(bool p_enable) {
 
 	glow_bicubic_upscale = p_enable;
-	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_intensity, glow_strength, glow_bloom, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_hdr_bleed_threshold, glow_hdr_bleed_threshold, glow_bicubic_upscale);
+	VS::get_singleton()->environment_set_glow(environment, glow_enabled, glow_levels, glow_level_weight, VS::EnvironmentGlowThresholdMode(glow_threshold_mode), glow_threshold, glow_threshold_gain, glow_threshold_fade, VS::EnvironmentGlowBlendMode(glow_blend_mode), glow_blend_intensity, glow_bicubic_upscale);
 }
 
 bool Environment::is_glow_bicubic_upscale_enabled() const {
@@ -945,6 +966,9 @@ void Environment::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_tonemap_white", "white"), &Environment::set_tonemap_white);
 	ClassDB::bind_method(D_METHOD("get_tonemap_white"), &Environment::get_tonemap_white);
 
+	ClassDB::bind_method(D_METHOD("set_tonemap_filmic_saturation", "filmic saturation"), &Environment::set_tonemap_filmic_saturation);
+	ClassDB::bind_method(D_METHOD("get_tonemap_filmic_saturation"), &Environment::get_tonemap_filmic_saturation);
+
 	ClassDB::bind_method(D_METHOD("set_tonemap_auto_exposure", "auto_exposure"), &Environment::set_tonemap_auto_exposure);
 	ClassDB::bind_method(D_METHOD("get_tonemap_auto_exposure"), &Environment::get_tonemap_auto_exposure);
 
@@ -964,6 +988,7 @@ void Environment::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "tonemap_mode", PROPERTY_HINT_ENUM, "Linear,Reindhart,Filmic,Aces"), "set_tonemapper", "get_tonemapper");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "tonemap_exposure", PROPERTY_HINT_RANGE, "0,16,0.01"), "set_tonemap_exposure", "get_tonemap_exposure");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "tonemap_white", PROPERTY_HINT_RANGE, "0,16,0.01"), "set_tonemap_white", "get_tonemap_white");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "tonemap_filmic_saturation"), "set_tonemap_filmic_saturation", "get_tonemap_filmic_saturation");
 	ADD_GROUP("Auto Exposure", "auto_exposure_");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "auto_exposure_enabled"), "set_tonemap_auto_exposure", "get_tonemap_auto_exposure");
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "auto_exposure_scale", PROPERTY_HINT_RANGE, "0.01,64,0.01"), "set_tonemap_auto_exposure_grey", "get_tonemap_auto_exposure_grey");
@@ -1097,23 +1122,26 @@ void Environment::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_glow_level", "idx", "enabled"), &Environment::set_glow_level);
 	ClassDB::bind_method(D_METHOD("is_glow_level_enabled", "idx"), &Environment::is_glow_level_enabled);
 
-	ClassDB::bind_method(D_METHOD("set_glow_intensity", "intensity"), &Environment::set_glow_intensity);
-	ClassDB::bind_method(D_METHOD("get_glow_intensity"), &Environment::get_glow_intensity);
+	ClassDB::bind_method(D_METHOD("set_glow_level_weight", "level weighting"), &Environment::set_glow_level_weight);
+	ClassDB::bind_method(D_METHOD("get_glow_level_weight"), &Environment::get_glow_level_weight);
 
-	ClassDB::bind_method(D_METHOD("set_glow_strength", "strength"), &Environment::set_glow_strength);
-	ClassDB::bind_method(D_METHOD("get_glow_strength"), &Environment::get_glow_strength);
+	ClassDB::bind_method(D_METHOD("set_glow_threshold_mode", "threshold mode"), &Environment::set_glow_threshold_mode);
+	ClassDB::bind_method(D_METHOD("get_glow_threshold_mode"), &Environment::get_glow_threshold_mode);
 
-	ClassDB::bind_method(D_METHOD("set_glow_bloom", "amount"), &Environment::set_glow_bloom);
-	ClassDB::bind_method(D_METHOD("get_glow_bloom"), &Environment::get_glow_bloom);
+	ClassDB::bind_method(D_METHOD("set_glow_threshold", "threshold"), &Environment::set_glow_threshold);
+	ClassDB::bind_method(D_METHOD("get_glow_threshold"), &Environment::get_glow_threshold);
+
+	ClassDB::bind_method(D_METHOD("set_glow_threshold_gain", "threshold gain"), &Environment::set_glow_threshold_gain);
+	ClassDB::bind_method(D_METHOD("get_glow_threshold_gain"), &Environment::get_glow_threshold_gain);
+
+	ClassDB::bind_method(D_METHOD("set_glow_threshold_fade", "threshold fade"), &Environment::set_glow_threshold_fade);
+	ClassDB::bind_method(D_METHOD("get_glow_threshold_fade"), &Environment::get_glow_threshold_fade);
 
 	ClassDB::bind_method(D_METHOD("set_glow_blend_mode", "mode"), &Environment::set_glow_blend_mode);
 	ClassDB::bind_method(D_METHOD("get_glow_blend_mode"), &Environment::get_glow_blend_mode);
 
-	ClassDB::bind_method(D_METHOD("set_glow_hdr_bleed_threshold", "threshold"), &Environment::set_glow_hdr_bleed_threshold);
-	ClassDB::bind_method(D_METHOD("get_glow_hdr_bleed_threshold"), &Environment::get_glow_hdr_bleed_threshold);
-
-	ClassDB::bind_method(D_METHOD("set_glow_hdr_bleed_scale", "scale"), &Environment::set_glow_hdr_bleed_scale);
-	ClassDB::bind_method(D_METHOD("get_glow_hdr_bleed_scale"), &Environment::get_glow_hdr_bleed_scale);
+	ClassDB::bind_method(D_METHOD("set_glow_blend_intensity", "intensity"), &Environment::set_glow_blend_intensity);
+	ClassDB::bind_method(D_METHOD("get_glow_blend_intensity"), &Environment::get_glow_blend_intensity);
 
 	ClassDB::bind_method(D_METHOD("set_glow_bicubic_upscale", "enabled"), &Environment::set_glow_bicubic_upscale);
 	ClassDB::bind_method(D_METHOD("is_glow_bicubic_upscale_enabled"), &Environment::is_glow_bicubic_upscale_enabled);
@@ -1128,12 +1156,13 @@ void Environment::_bind_methods() {
 	ADD_PROPERTYI(PropertyInfo(Variant::BOOL, "glow_levels/6"), "set_glow_level", "is_glow_level_enabled", 5);
 	ADD_PROPERTYI(PropertyInfo(Variant::BOOL, "glow_levels/7"), "set_glow_level", "is_glow_level_enabled", 6);
 
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_intensity", PROPERTY_HINT_RANGE, "0.0,8.0,0.01"), "set_glow_intensity", "get_glow_intensity");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_strength", PROPERTY_HINT_RANGE, "0.0,2.0,0.01"), "set_glow_strength", "get_glow_strength");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_bloom", PROPERTY_HINT_RANGE, "0.0,1.0,0.01"), "set_glow_bloom", "get_glow_bloom");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_level_weight", PROPERTY_HINT_RANGE, "0.0,2.0,0.01"), "set_glow_level_weight", "get_glow_level_weight");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "glow_threshold_mode", PROPERTY_HINT_ENUM, "Cut,Cut Smooth,Boost"), "set_glow_threshold_mode", "get_glow_threshold_mode");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold", PROPERTY_HINT_RANGE, "0.0,16.0,0.01"), "set_glow_threshold", "get_glow_threshold");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold_gain", PROPERTY_HINT_RANGE, "1.0,32.0,0.01"), "set_glow_threshold_gain", "get_glow_threshold_gain");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_threshold_fade", PROPERTY_HINT_RANGE, "0.0,32.0,0.01"), "set_glow_threshold_fade", "get_glow_threshold_fade");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "glow_blend_mode", PROPERTY_HINT_ENUM, "Additive,Screen,Softlight,Replace,Linear Add,Linear Mix"), "set_glow_blend_mode", "get_glow_blend_mode");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_hdr_threshold", PROPERTY_HINT_RANGE, "0.0,4.0,0.01"), "set_glow_hdr_bleed_threshold", "get_glow_hdr_bleed_threshold");
-	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_hdr_scale", PROPERTY_HINT_RANGE, "0.0,4.0,0.01"), "set_glow_hdr_bleed_scale", "get_glow_hdr_bleed_scale");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "glow_blend_intensity", PROPERTY_HINT_RANGE, "0.0,1.0,0.01"), "set_glow_blend_intensity", "get_glow_blend_intensity");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "glow_bicubic_upscale"), "set_glow_bicubic_upscale", "is_glow_bicubic_upscale_enabled");
 
 	ClassDB::bind_method(D_METHOD("set_adjustment_enable", "enabled"), &Environment::set_adjustment_enable);
@@ -1204,7 +1233,7 @@ Environment::Environment() {
 	//ambient_sky_contribution = 1.0;
 	set_ambient_light_sky_contribution(1.0);
 
-	tone_mapper = TONE_MAPPER_LINEAR;
+	tonemapper = TONE_MAPPER_LINEAR;
 	tonemap_exposure = 1.0;
 	tonemap_white = 1.0;
 	tonemap_auto_exposure = false;
@@ -1213,7 +1242,7 @@ Environment::Environment() {
 	tonemap_auto_exposure_speed = 0.5;
 	tonemap_auto_exposure_grey = 0.4;
 
-	set_tonemapper(tone_mapper); //update
+	set_tonemapper(tonemapper); //update
 
 	adjustment_enabled = false;
 	adjustment_contrast = 1.0;
@@ -1243,12 +1272,10 @@ Environment::Environment() {
 
 	glow_enabled = false;
 	glow_levels = (1 << 2) | (1 << 4);
-	glow_intensity = 0.8;
-	glow_strength = 1.0;
-	glow_bloom = 0.0;
-	glow_blend_mode = GLOW_BLEND_MODE_SOFTLIGHT;
-	glow_hdr_bleed_threshold = 1.0;
-	glow_hdr_bleed_scale = 2.0;
+	glow_level_weight = 1.0;
+	glow_blend_mode = GLOW_BLEND_MODE_LINEAR_ADD;
+	glow_blend_intensity = 0.5;
+	glow_threshold = 1.2;
 	glow_bicubic_upscale = false;
 
 	dof_blur_far_enabled = false;

@@ -395,17 +395,19 @@ public:
 
 		bool glow_enabled;
 		int glow_levels;
-		float glow_intensity;
-		float glow_strength;
-		float glow_bloom;
+		float glow_level_weight;
+		VS::EnvironmentGlowThresholdMode glow_threshold_mode;
+		float glow_threshold;
+		float glow_threshold_gain;
+		float glow_threshold_fade;
 		VS::EnvironmentGlowBlendMode glow_blend_mode;
-		float glow_hdr_bleed_threshold;
-		float glow_hdr_bleed_scale;
+		float glow_blend_intensity;
 		bool glow_bicubic_upscale;
 
-		VS::EnvironmentToneMapper tone_mapper;
+		VS::EnvironmentToneMapper tonemapper;
 		float tone_mapper_exposure;
 		float tone_mapper_exposure_white;
+		bool tone_mapper_filmic_saturation;
 		bool auto_exposure;
 		float auto_exposure_speed;
 		float auto_exposure_min;
@@ -473,9 +475,10 @@ public:
 			ssao_quality = VS::ENV_SSAO_QUALITY_LOW;
 			ssao_bilateral_sharpness = 4;
 
-			tone_mapper = VS::ENV_TONE_MAPPER_LINEAR;
+			tonemapper = VS::ENV_TONE_MAPPER_LINEAR;
 			tone_mapper_exposure = 1.0;
 			tone_mapper_exposure_white = 1.0;
+			tone_mapper_filmic_saturation = false;
 			auto_exposure = false;
 			auto_exposure_speed = 0.5;
 			auto_exposure_min = 0.05;
@@ -484,12 +487,13 @@ public:
 
 			glow_enabled = false;
 			glow_levels = (1 << 2) | (1 << 4);
-			glow_intensity = 0.8;
-			glow_strength = 1.0;
-			glow_bloom = 0.0;
-			glow_blend_mode = VS::GLOW_BLEND_MODE_SOFTLIGHT;
-			glow_hdr_bleed_threshold = 1.0;
-			glow_hdr_bleed_scale = 2.0;
+			glow_level_weight = 1.0;
+			glow_threshold_mode = VS::GLOW_THRESHOLD_MODE_CUT;
+			glow_threshold = 2.0;
+			glow_threshold_gain = 8.0;
+			glow_threshold_fade = 16.0;
+			glow_blend_mode = VS::GLOW_BLEND_MODE_LINEAR_ADD;
+			glow_blend_intensity = 0.5;
 			glow_bicubic_upscale = false;
 
 			dof_blur_far_enabled = false;
@@ -543,13 +547,13 @@ public:
 
 	virtual void environment_set_dof_blur_near(RID p_env, bool p_enable, float p_distance, float p_transition, float p_amount, VS::EnvironmentDOFBlurQuality p_quality);
 	virtual void environment_set_dof_blur_far(RID p_env, bool p_enable, float p_distance, float p_transition, float p_amount, VS::EnvironmentDOFBlurQuality p_quality);
-	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_intensity, float p_strength, float p_bloom_threshold, VS::EnvironmentGlowBlendMode p_blend_mode, float p_hdr_bleed_threshold, float p_hdr_bleed_scale, bool p_bicubic_upscale);
+	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_level_weight, VS::EnvironmentGlowThresholdMode p_threshold_mode, float p_threshold, float p_threshold_gain, float p_threshold_fade, VS::EnvironmentGlowBlendMode p_blend_mode, float p_blend_intensity, bool p_bicubic_upscale);
 	virtual void environment_set_fog(RID p_env, bool p_enable, float p_begin, float p_end, RID p_gradient_texture);
 
 	virtual void environment_set_ssr(RID p_env, bool p_enable, int p_max_steps, float p_fade_in, float p_fade_out, float p_depth_tolerance, bool p_roughness);
 	virtual void environment_set_ssao(RID p_env, bool p_enable, float p_radius, float p_intensity, float p_radius2, float p_intensity2, float p_bias, float p_light_affect, float p_ao_channel_affect, const Color &p_color, VS::EnvironmentSSAOQuality p_quality, VS::EnvironmentSSAOBlur p_blur, float p_bilateral_sharpness);
 
-	virtual void environment_set_tonemap(RID p_env, VS::EnvironmentToneMapper p_tone_mapper, float p_exposure, float p_white, bool p_auto_exposure, float p_min_luminance, float p_max_luminance, float p_auto_exp_speed, float p_auto_exp_scale);
+	virtual void environment_set_tonemap(RID p_env, VS::EnvironmentToneMapper p_tone_mapper, float p_exposure, float p_white, bool p_filmic_saturation, bool p_auto_exposure, float p_min_luminance, float p_max_luminance, float p_auto_exp_speed, float p_auto_exp_scale);
 
 	virtual void environment_set_adjustment(RID p_env, bool p_enable, float p_brightness, float p_contrast, float p_saturation, RID p_ramp);
 

@@ -707,7 +707,12 @@ public:
 		GLOW_BLEND_MODE_LINEAR_ADD,
 		GLOW_BLEND_MODE_LINEAR_MIX,
 	};
-	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_intensity, float p_strength, float p_bloom_threshold, EnvironmentGlowBlendMode p_blend_mode, float p_hdr_bleed_threshold, float p_hdr_bleed_scale, bool p_bicubic_upscale) = 0;
+	enum EnvironmentGlowThresholdMode {
+		GLOW_THRESHOLD_MODE_CUT,
+		GLOW_THRESHOLD_MODE_CUT_SMOOTH,
+		GLOW_THRESHOLD_MODE_BOOST,
+	};
+	virtual void environment_set_glow(RID p_env, bool p_enable, int p_level_flags, float p_level_weight, EnvironmentGlowThresholdMode p_threshold_mode, float p_threshold, float p_threshold_gain, float p_threshold_fade, EnvironmentGlowBlendMode p_blend_mode, float p_blend_intensity, bool p_bicubic_upscale) = 0;
 
 	enum EnvironmentToneMapper {
 		ENV_TONE_MAPPER_LINEAR,
@@ -716,7 +721,8 @@ public:
 		ENV_TONE_MAPPER_ACES
 	};
 
-	virtual void environment_set_tonemap(RID p_env, EnvironmentToneMapper p_tone_mapper, float p_exposure, float p_white, bool p_auto_exposure, float p_min_luminance, float p_max_luminance, float p_auto_exp_speed, float p_auto_exp_grey) = 0;
+	virtual void environment_set_tonemap(RID p_env, EnvironmentToneMapper p_tone_mapper, float p_exposure, float p_white, bool p_filmic_saturation, bool p_auto_exposure, float p_min_luminance, float p_max_luminance, float p_auto_exp_speed, float p_auto_exp_grey) = 0;
+
 	virtual void environment_set_adjustment(RID p_env, bool p_enable, float p_brightness, float p_contrast, float p_saturation, RID p_ramp) = 0;
 
 	virtual void environment_set_ssr(RID p_env, bool p_enable, int p_max_steps, float p_fade_in, float p_fade_out, float p_depth_tolerance, bool p_roughness) = 0;
@@ -1047,6 +1053,7 @@ VARIANT_ENUM_CAST(VisualServer::ReflectionProbeUpdateMode);
 VARIANT_ENUM_CAST(VisualServer::ParticlesDrawOrder);
 VARIANT_ENUM_CAST(VisualServer::EnvironmentBG);
 VARIANT_ENUM_CAST(VisualServer::EnvironmentDOFBlurQuality);
+VARIANT_ENUM_CAST(VisualServer::EnvironmentGlowThresholdMode);
 VARIANT_ENUM_CAST(VisualServer::EnvironmentGlowBlendMode);
 VARIANT_ENUM_CAST(VisualServer::EnvironmentToneMapper);
 VARIANT_ENUM_CAST(VisualServer::EnvironmentSSAOQuality);
