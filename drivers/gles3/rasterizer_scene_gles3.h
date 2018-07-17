@@ -396,6 +396,7 @@ public:
 		bool glow_enabled;
 		int glow_levels;
 		float glow_level_weight;
+		float glow_level_weights_total; // derived from glow_level_weights & MAX_GLOW_LEVELS (sum of weight^n with n = { enabled layers })
 		VS::EnvironmentGlowThresholdMode glow_threshold_mode;
 		float glow_threshold;
 		float glow_threshold_gain;

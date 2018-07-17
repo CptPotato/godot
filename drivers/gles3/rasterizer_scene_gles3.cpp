@@ -872,7 +872,20 @@ void RasterizerSceneGLES3::environment_set_glow(RID p_env, bool p_enable, int p_
 
 	env->glow_enabled = p_enable;
 	env->glow_levels = p_level_flags;
-	env->glow_level_weight = p_level_weight;
+
+	env->glow_level_weight = p_level_weight >= 0.0 ? p_level_weight + 1.0 : (1.0 / (1.0 - p_level_weight)); // remap to [1/a, a]
+
+	// calculate total level weight: lv1 = in * w, lv2 = lv1 * w = in * w * w, lvN = in * w^N (sum up for each enabled level)
+	float layer_weight_result = env->glow_level_weight; // accumulate weights
+	env->glow_level_weights_total = 0;
+	for (int i = 0; i < VS::MAX_GLOW_LEVELS; i++) {
+		if(env->glow_levels & (1 << i)) {
+			env->glow_level_weights_total += layer_weight_result;
+		}
+
+		layer_weight_result *= env->glow_level_weight;
+	}
+
 	env->glow_threshold_mode = p_threshold_mode;
 	env->glow_threshold = p_threshold;
 	env->glow_threshold_gain = p_threshold_gain;
@@ -3900,6 +3913,7 @@ void RasterizerSceneGLES3::_post_process(Environment *env, const CameraMatrix &p
 			state.effect_blur_shader.bind();
 			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::PIXEL_SIZE, Vector2(1.0 / vp_w, 1.0 / vp_h));
 			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::LOD, float(i));
+
 			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::GLOW_LEVEL_WEIGHT, env->glow_level_weight);
 
 			glActiveTexture(GL_TEXTURE0);
@@ -3935,7 +3949,7 @@ void RasterizerSceneGLES3::_post_process(Environment *env, const CameraMatrix &p
 			state.effect_blur_shader.bind();
 			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::PIXEL_SIZE, Vector2(1.0 / vp_w, 1.0 / vp_h));
 			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::LOD, float(i));
-			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::GLOW_LEVEL_WEIGHT, env->glow_level_weight); // todo: normalize
+			state.effect_blur_shader.set_uniform(EffectBlurShaderGLES3::GLOW_LEVEL_WEIGHT, env->glow_level_weight);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, storage->frame.current_rt->effects.mip_maps[1].color);
 			glBindFramebuffer(GL_FRAMEBUFFER, storage->frame.current_rt->effects.mip_maps[0].sizes[i + 1].fbo); //next level, since mipmaps[0] starts one level bigger
@@ -3961,7 +3975,8 @@ void RasterizerSceneGLES3::_post_process(Environment *env, const CameraMatrix &p
 	state.tonemap_shader.set_conditional(TonemapShaderGLES3::USE_GLOW_FILTER_BICUBIC, env->glow_bicubic_upscale);
 
 	if (max_glow_level >= 0) {
-
+		state.tonemap_shader.set_conditional(TonemapShaderGLES3::USING_GLOW, true);
+				
 		for (int i = 0; i < (max_glow_level + 1); i++) {
 
 			if (glow_mask & (1 << i)) {
@@ -4018,6 +4033,8 @@ void RasterizerSceneGLES3::_post_process(Environment *env, const CameraMatrix &p
 	if (max_glow_level >= 0) {
 
 		state.tonemap_shader.set_uniform(TonemapShaderGLES3::GLOW_BLEND_INTENSITY, env->glow_blend_intensity);
+		state.tonemap_shader.set_uniform(TonemapShaderGLES3::GLOW_NORMALIZATION_FACTOR, 1.0 / env->glow_level_weights_total);
+
 		int ss[2] = {
 			storage->frame.current_rt->width,
 			storage->frame.current_rt->height,

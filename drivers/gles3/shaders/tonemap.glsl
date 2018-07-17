@@ -18,8 +18,6 @@ void main()
 
 [fragment]
 
-#define NORMALIZE_GLOW
-
 #if !defined(GLES_OVER_GL)
 	precision mediump float;
 #endif
@@ -36,9 +34,7 @@ uniform float white;
 	uniform highp float auto_exposure_grey;
 #endif
 
-#if defined(USE_GLOW_LEVEL1) || defined(USE_GLOW_LEVEL2) || defined(USE_GLOW_LEVEL3) || defined(USE_GLOW_LEVEL4) || defined(USE_GLOW_LEVEL5) || defined(USE_GLOW_LEVEL6) || defined(USE_GLOW_LEVEL7)
-	#define USING_GLOW // only use glow when at least one glow level is selected
-	
+#ifdef USING_GLOW
 	// weird but needed so tonemap.glsl.gen.h contains all needed #defines
 	#ifdef USE_GLOW_LINEAR_ADD
 		#define BLEND_GLOW_LINEAR
@@ -47,6 +43,8 @@ uniform float white;
 			#define BLEND_GLOW_LINEAR
 		#endif
 	#endif
+	
+	uniform float glow_normalization_factor;
 	
 	uniform highp sampler2D source_glow; //texunit:2
 	uniform highp float glow_blend_intensity;
@@ -220,69 +218,42 @@ vec3 apply_tonemapping(vec3 color, float white) // inputs are LINEAR, always out
 	return color; // no other seleced -> linear
 }
 
-vec3 gather_glow(sampler2D tex, vec2 uv) // sample all selected glow levels
-{
-	vec3 glow = vec3(0.0f);
-	
-	#ifdef NORMALIZE_GLOW
-		float GlowNormalize = 0;
-	#endif
-	
-	#ifdef USE_GLOW_LEVEL1
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 1).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+#ifdef USING_GLOW
+	vec3 gather_glow(sampler2D tex, vec2 uv) // sample all selected glow levels
+	{
+		vec3 glow = vec3(0.0f);
+		
+		#ifdef USE_GLOW_LEVEL1
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 1).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL2
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 2).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL2
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 2).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL3
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 3).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL3
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 3).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL4
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 4).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL4
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 4).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL5
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 5).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL5
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 5).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL6
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 6).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL6
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 6).rgb;
 		#endif
-	#endif
 
-	#ifdef USE_GLOW_LEVEL7
-		glow += GLOW_TEXTURE_SAMPLE(tex, uv, 7).rgb;
-		#ifdef NORMALIZE_GLOW
-			GlowNormalize += 1.0;
+		#ifdef USE_GLOW_LEVEL7
+			glow += GLOW_TEXTURE_SAMPLE(tex, uv, 7).rgb;
 		#endif
-	#endif
-	
-	#ifdef NORMALIZE_GLOW
-		glow /= GlowNormalize;
-	#endif
-	
-	return glow;
-}
+		
+		return glow * glow_normalization_factor;
+	}
+#endif
 
 vec3 apply_glow(vec3 color, vec3 glow) // apply srgb glow using the selected blending mode
 {

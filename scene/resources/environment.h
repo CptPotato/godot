@@ -146,6 +146,7 @@ private:
 	bool glow_enabled;
 	int glow_levels;
 	float glow_level_weight;
+	float glow_level_weights_total;
 	GlowThresholdMode glow_threshold_mode;
 	float glow_threshold;
 	float glow_threshold_gain;
