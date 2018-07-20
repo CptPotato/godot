@@ -257,26 +257,34 @@ vec3 apply_tonemapping(vec3 color, float white) // inputs are LINEAR, always out
 	}
 #endif
 
-vec3 apply_glow(vec3 color, vec3 glow) // apply srgb glow using the selected blending mode
+vec3 apply_glow(vec3 color, vec3 glow, float glow_blend_intensity) // apply srgb glow using the selected blending mode
 {
 	#ifdef USE_GLOW_REPLACE
-		color = glow;
+		color = glow * glow_blend_intensity;
 	#endif
 
 	#ifdef USE_GLOW_SCREEN
+		glow *= glow_blend_intensity;
 		color = max((color + glow) - (color * glow), vec3(0.0));
 	#endif
 
 	#ifdef USE_GLOW_SOFTLIGHT
+		/* old mode, replaced because it's fairly complex and uses a lot of dynamic branching
 		glow = glow * vec3(0.5f) + vec3(0.5f);
 
 		color.r = (glow.r <= 0.5f) ? (color.r - (1.0f - 2.0f * glow.r) * color.r * (1.0f - color.r)) : (((glow.r > 0.5f) && (color.r <= 0.25f)) ? (color.r + (2.0f * glow.r - 1.0f) * (4.0f * color.r * (4.0f * color.r + 1.0f) * (color.r - 1.0f) + 7.0f * color.r)) : (color.r + (2.0f * glow.r - 1.0f) * (sqrt(color.r) - color.r)));
 		color.g = (glow.g <= 0.5f) ? (color.g - (1.0f - 2.0f * glow.g) * color.g * (1.0f - color.g)) : (((glow.g > 0.5f) && (color.g <= 0.25f)) ? (color.g + (2.0f * glow.g - 1.0f) * (4.0f * color.g * (4.0f * color.g + 1.0f) * (color.g - 1.0f) + 7.0f * color.g)) : (color.g + (2.0f * glow.g - 1.0f) * (sqrt(color.g) - color.g)));
 		color.b = (glow.b <= 0.5f) ? (color.b - (1.0f - 2.0f * glow.b) * color.b * (1.0f - color.b)) : (((glow.b > 0.5f) && (color.b <= 0.25f)) ? (color.b + (2.0f * glow.b - 1.0f) * (4.0f * color.b * (4.0f * color.b + 1.0f) * (color.b - 1.0f) + 7.0f * color.b)) : (color.b + (2.0f * glow.b - 1.0f) * (sqrt(color.b) - color.b)));
+		*/
+		
+		// assuming color and glow are clamped to [0;1]
+		
+		vec3 c2 = (2.0f * color - 1.0f);
+		color = color + glow.rgb * (1.0f - c2 * c2) * 0.25f * glow_blend_intensity;
 	#endif
 	
 	#if !defined(USE_GLOW_SCREEN) && !defined(USE_GLOW_SOFTLIGHT) && !defined(USE_GLOW_REPLACE) && !defined(USE_GLOW_LINEAR_ADD) && !defined(USE_GLOW_LINEAR_MIX) // no other selected -> additive
-		color += glow;
+		color += glow * glow_blend_intensity;
 	#endif
 
 	return color;
@@ -343,13 +351,13 @@ void main()
 		// Glow
 
 		#ifdef USING_GLOW
-			vec3 glow = gather_glow(source_glow, uv_interp) * glow_blend_intensity;
+			vec3 glow = gather_glow(source_glow, uv_interp);
 
 			// high dynamic range -> SRGB
 			glow = apply_tonemapping(glow, white);
 			glow = linear_to_srgb(glow);
 
-			color = apply_glow(color, glow);
+			color = apply_glow(color, glow, glow_blend_intensity);
 		#endif
 	#else
 		// blend glow in linear space and tonemap result afterwards ("physically correct")
