@@ -207,9 +207,11 @@ vec3 apply_tonemapping(vec3 color, float white) // inputs are LINEAR, always out
 			color = tonemap_aces(color, white);
 		#endif
 		
-		#ifdef USE_FILMIC_SATURATION
-			return mix(color, vec3((color.r + color.g + color.b) * 0.33333f), filmic_sat_resaturate);
-		#else
+		#ifdef BLEND_GLOW_LINEAR
+			#ifdef USE_FILMIC_SATURATION
+				// don't resaturate for non linear blend modes (because tonemapping is done twice there, would result in oversaturation)
+				return mix(color, vec3((color.r + color.g + color.b) * 0.33333f), filmic_sat_resaturate);
+			#endif
 		#endif
 	#else
 		color = clamp(color, vec3(0.0f), vec3(1.0f)); // no other seleced -> just clamp
