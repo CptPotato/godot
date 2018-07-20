@@ -278,7 +278,22 @@ void main() {
 	#endif
 	
 	#ifdef GLOW_USE_THRESHOLD_CUT_SMOOTH
-		frag_color.rgb = max((frag_color.rgb - glow_threshold) * glow_threshold_gain, vec3(0.0));
+		// TODO: cleanup and maybe optimize (if possible)
+		vec3 boost_s = frag_color.rgb - vec3(glow_threshold);
+		float boost_t = glow_threshold + glow_threshold_fade;
+		float boost_t_s = glow_threshold_fade;
+		float boost_m = glow_threshold_gain + 1;
+		float boost_m_1 = glow_threshold_gain;
+		
+		float boost_normfac = 1.0f / (2.0f * boost_t_s);
+		
+		vec3 boost_b = boost_s * boost_s * boost_normfac * boost_m_1;
+		vec3 boost_c = boost_m * (boost_s - boost_t_s) + boost_t + boost_t_s * boost_t_s * boost_normfac * boost_m_1 - frag_color.rgb;
+		
+		vec3 s3 = step(vec3(boost_t_s), boost_s);
+		vec3 s2 = vec3(1.0f) - step(boost_s, vec3(0.0f)) - s3;
+		
+		frag_color.rgb = boost_b * s2 + boost_c * s3; // s1 = 0
 	#endif
 	
 	#ifdef GLOW_USE_THRESHOLD_BOOST
@@ -286,7 +301,24 @@ void main() {
 	#endif
 	
 	#ifdef GLOW_USE_THRESHOLD_BOOST_SMOOTH
-		frag_color.rgb += frag_color.rgb * (glow_threshold_gain - 1.0f) * step(vec3(glow_threshold), frag_color.rgb);
+		// TODO: cleanup and maybe optimize (if possible)
+		vec3 boost_s = frag_color.rgb - vec3(glow_threshold);
+		float boost_t = glow_threshold + glow_threshold_fade;
+		float boost_t_s = glow_threshold_fade;
+		float boost_m = glow_threshold_gain;
+		float boost_m_1 = glow_threshold_gain - 1;
+		
+		float boost_normfac = 1.0f / (2.0f * boost_t_s);
+		
+		vec3 boost_a = frag_color.rgb;
+		vec3 boost_b = frag_color.rgb + boost_s * boost_s * boost_normfac * boost_m_1;
+		vec3 boost_c = boost_m * (boost_s - boost_t_s) + boost_t + boost_t_s * boost_t_s * boost_normfac * boost_m_1;
+		
+		vec3 s1 = step(boost_s, vec3(0.0f));
+		vec3 s3 = step(vec3(boost_t_s), boost_s);
+		vec3 s2 = vec3(1.0f) - s1 - s3;
+		
+		frag_color.rgb = boost_a * s1 + boost_b * s2 + boost_c * s3;
 	#endif
 	
 #endif
