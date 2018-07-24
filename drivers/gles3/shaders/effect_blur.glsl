@@ -133,7 +133,7 @@ void main() {
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0, 2.0)*pixel_size,lod )*0.06136;
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0,-1.0)*pixel_size,lod )*0.24477;
 	color+=textureLod( source_color,  uv_interp+vec2( 0.0,-2.0)*pixel_size,lod )*0.06136;
-	frag_color = color * glow_level_weight;
+	frag_color = color;
 #endif
 
 //glow uses larger sigma for a more rounded blur effect
